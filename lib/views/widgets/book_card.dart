@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:readmore/readmore.dart';
 import 'package:which_book_2025/models/book_model.dart';
 
 class BookCard extends StatelessWidget {
@@ -9,7 +10,6 @@ class BookCard extends StatelessWidget {
   final double scale;
   final BookModel book;
   final bool isDetail;
-  final VoidCallback onToggleDetail;
 
   const BookCard({
     super.key,
@@ -17,7 +17,6 @@ class BookCard extends StatelessWidget {
     required this.scale,
     required this.book,
     required this.isDetail,
-    required this.onToggleDetail,
   });
 
   @override
@@ -73,7 +72,29 @@ class BookCard extends StatelessWidget {
                       ),
                     ),
 
-                SizedBox(height: 5),
+                SizedBox(height: 10),
+                SizedBox(
+                  height: 20,
+                  child: AnimatedTextKit(
+                    displayFullTextOnTap: true,
+                    stopPauseOnTap: true,
+                    repeatForever: true,
+                    pause: 100.ms,
+                    animatedTexts: [
+                      TyperAnimatedText(
+                        book.subtitle,
+                        speed: 300.ms,
+                        curve: Curves.linear,
+                        textStyle: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20),
                 Text(
                   book.author,
                   style: TextStyle(
@@ -87,33 +108,40 @@ class BookCard extends StatelessWidget {
                   height: size.height * 0.3,
                   padding: EdgeInsets.all(20),
 
-                  child: AnimatedTextKit(
-                    repeatForever: true,
-                    pause: 100.ms,
-                    animatedTexts: [
-                      for (var i = 0; i < book.introduction.length; i++)
-                        FadeAnimatedText(
-                          book.introduction[i].intro,
-                          textStyle: TextStyle(height: 1.2),
-                          duration: 10.seconds,
-                        ),
-                    ],
+                  child: ReadMoreText(
+                    book.introduction,
+                    trimMode: TrimMode.Line,
+                    trimLines: 9,
+                    trimCollapsedText: "...더보기",
+                    trimExpandedText: "...접기",
+                    moreStyle: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
           Positioned(
-            top: isDetail ? -55 : -(size.height * 0.22),
+            top: isDetail ? -50 : -(size.height * 0.22),
             left: size.width * 0.32,
-            child: IconButton(
-              highlightColor: Colors.red,
+            child: Icon(
+              isDetail ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
+              size: 60,
               color: Colors.black,
-              iconSize: 50,
-              onPressed: onToggleDetail,
-              icon: Icon(
-                isDetail ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
-              ),
+              shadows: [
+                Shadow(
+                  color: book.genre.thintColor,
+                  offset: Offset(3, 3),
+                  blurRadius: 20,
+                ),
+                Shadow(
+                  color: book.genre.thintColor,
+                  offset: Offset(-3, -3),
+                  blurRadius: 20,
+                ),
+              ],
             ),
           ),
         ],

@@ -26,6 +26,13 @@ enum GenreTheme {
     GenreTheme.essay => "essay",
   };
 
+  String get genreName => switch (this) {
+    GenreTheme.novel => "소설",
+    GenreTheme.philosophy => "철학",
+    GenreTheme.history => "역사",
+    GenreTheme.travel => "여행기",
+    GenreTheme.essay => "수필",
+  };
   Color get thintColor => switch (this) {
     GenreTheme.novel => Colors.amber.shade100,
     GenreTheme.philosophy => Colors.cyan.shade100,

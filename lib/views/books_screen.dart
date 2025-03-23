@@ -5,6 +5,7 @@ import 'package:which_book_2025/services/json_converter.dart';
 import 'package:which_book_2025/views/widgets/background_card.dart';
 import 'package:which_book_2025/views/widgets/book_card.dart';
 import 'package:which_book_2025/views/widgets/book_cover_card.dart';
+import 'package:which_book_2025/views/widgets/book_detail_card.dart';
 
 class BookScreen extends StatefulWidget {
   const BookScreen({super.key});
@@ -51,20 +52,18 @@ class _BookScreenState extends State<BookScreen> {
   }
 
   int _currentPage = 0;
-
   void _onPageChanged(int newPage) {
     setState(() {
       _currentPage = newPage;
     });
   }
 
-  bool isDetail = false;
-  void onToggleDetail() {
-    print("before setState: isDetail=$isDetail");
+  bool _isDetail = false;
+
+  void _onToggleDetail() {
     setState(() {
-      isDetail = !isDetail;
+      _isDetail = !_isDetail;
     });
-    print("after setState: isDetail=$isDetail");
   }
 
   @override
@@ -97,13 +96,12 @@ class _BookScreenState extends State<BookScreen> {
                                   final difference = (scroll - index).abs();
                                   final scale = 1 - (difference * 0.1);
                                   return GestureDetector(
-                                    onTap: onToggleDetail,
+                                    onTap: _onToggleDetail,
                                     child: BookCard(
                                       index: index,
                                       scale: scale,
                                       book: books[index + 1],
-                                      isDetail: isDetail,
-                                      onToggleDetail: onToggleDetail,
+                                      isDetail: _isDetail,
                                     ),
                                   );
                                 },
@@ -113,7 +111,7 @@ class _BookScreenState extends State<BookScreen> {
                           );
                         },
                       )
-                      .animate(target: isDetail ? 1 : 0)
+                      .animate(target: _isDetail ? 1 : 0)
                       .slideY(begin: 0, end: 0.65),
                   Positioned(
                     top: 120,
@@ -134,8 +132,17 @@ class _BookScreenState extends State<BookScreen> {
                             },
                           ),
                         )
-                        .animate(target: isDetail ? 1 : 0)
+                        .animate(target: _isDetail ? 1 : 0)
                         .slideY(begin: 0, end: 3, duration: 600.ms),
+                  ),
+                  GestureDetector(
+                    onTap: _onToggleDetail,
+                    child: BookDetailCard(
+                          index: _currentPage + 1,
+                          book: books[_currentPage + 1],
+                        )
+                        .animate(target: _isDetail ? 1 : 0)
+                        .slideY(begin: -1, end: 0, duration: 600.ms),
                   ),
                 ],
               ),

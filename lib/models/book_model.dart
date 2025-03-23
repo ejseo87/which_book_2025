@@ -11,8 +11,9 @@ class BookModel {
   final double rating;
   final String cover;
   final String backCover;
-  final List<IntroModel> introduction;
-  final String youtube;
+  final String introduction;
+  final String authorBio;
+  final List<YoutuveModel> youtubeContents;
 
   BookModel({
     required this.id,
@@ -26,7 +27,8 @@ class BookModel {
     required this.cover,
     required this.backCover,
     required this.introduction,
-    required this.youtube,
+    required this.authorBio,
+    required this.youtubeContents,
   });
 
   BookModel.fromJson(Map<String, dynamic> json)
@@ -40,12 +42,14 @@ class BookModel {
       rating = json["rating"],
       cover = json["cover"],
       backCover = json["back_cover"],
-      introduction =
-          json["introduction"]
-              .map<IntroModel>((intro) => IntroModel.fromJson(intro))
-              .toList(),
-      youtube = json["youtube"];
-  /* 
+      introduction = json["introduction"],
+      authorBio = json["authorBio"],
+      youtubeContents =
+          json["youtubeContents"]
+              .map<YoutuveModel>((content) => YoutuveModel.fromJson(content))
+              .toList();
+
+  /* 나중에 최종 모델에 맞게 수정할 것. 
   Map<String, dynamic> toJson() {
     return {
       "id": id,
@@ -59,10 +63,11 @@ class BookModel {
       "cover": cover,
       "backCover": backCover,
       "introduction": introduction.,
-      "youtube": youtube,
+      "youtubeContents": youtubeContents,
     };
   }
  */
+
   printBookModel() {
     print("id = $id");
     print("title = $title");
@@ -75,18 +80,43 @@ class BookModel {
     print("cover = $cover");
     print("backCover = $backCover");
     print("introduction = $introduction");
-    print("youtube = $youtube");
+    print("author_bio = $authorBio");
+    print("youtubeContents = $youtubeContents");
   }
 }
 
-class IntroModel {
-  final int id;
-  final String intro;
-  IntroModel({required this.id, required this.intro});
-  IntroModel.fromJson(Map<String, dynamic> json)
-    : id = json["id"],
-      intro = json["intro"];
+class YoutuveModel {
+  final String title;
+  final String url;
+  final String youtubeid;
+  final String creator;
+
+  YoutuveModel({
+    required this.title,
+    required this.url,
+    required this.youtubeid,
+    required this.creator,
+  });
+  YoutuveModel.fromJson(Map<String, dynamic> json)
+    : title = json["title"],
+      url = json["url"],
+      youtubeid = json["youtubeid"],
+      creator = json["creator"];
+
   Map<String, dynamic> toJson() {
-    return {"id": id, "intro": intro};
+    return {
+      "title": title,
+      "url": url,
+      "youtubeid": youtubeid,
+      "creator": creator,
+    };
+  }
+
+  void printYoutuveModel() {
+    print("title = $title");
+    print("url = $url");
+    print("url = $url");
+    print("youtubeid = $youtubeid");
+    print("creator = $creator");
   }
 }
