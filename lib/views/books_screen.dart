@@ -34,7 +34,7 @@ class _BookScreenState extends State<BookScreen> {
       _bookController.animateTo(
         _cardController.position.pixels,
         duration: Duration(milliseconds: 200),
-        curve: Curves.bounceOut,
+        curve: Curves.linear,
       );
     });
   }
@@ -102,6 +102,7 @@ class _BookScreenState extends State<BookScreen> {
                                       scale: scale,
                                       book: books[index + 1],
                                       isDetail: _isDetail,
+                                      onToggleDetail: _onToggleDetail,
                                     ),
                                   );
                                 },
@@ -125,9 +126,12 @@ class _BookScreenState extends State<BookScreen> {
                             controller: _bookController,
                             itemCount: books.length - 1,
                             itemBuilder: (context, index) {
-                              return BookCoverCard(
-                                size: size,
-                                book: books[index + 1],
+                              return GestureDetector(
+                                onTap: _onToggleDetail,
+                                child: BookCoverCard(
+                                  size: size,
+                                  book: books[index + 1],
+                                ),
                               );
                             },
                           ),
@@ -136,13 +140,14 @@ class _BookScreenState extends State<BookScreen> {
                         .slideY(begin: 0, end: 3, duration: 600.ms),
                   ),
                   GestureDetector(
-                    onTap: _onToggleDetail,
+                    onLongPress: _onToggleDetail,
                     child: BookDetailCard(
-                          index: _currentPage + 1,
+                          key: ValueKey(_currentPage + 1),
+                          isDetail: _isDetail,
                           book: books[_currentPage + 1],
                         )
                         .animate(target: _isDetail ? 1 : 0)
-                        .slideY(begin: -1, end: 0, duration: 600.ms),
+                        .slideY(begin: -1.2, end: 0, duration: 600.ms),
                   ),
                 ],
               ),

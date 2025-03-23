@@ -4,7 +4,13 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 class BookYoutubePlayer extends StatefulWidget {
   final String id;
   final String title;
-  const BookYoutubePlayer({super.key, required this.id, required this.title});
+  final bool isDetail;
+  const BookYoutubePlayer({
+    super.key,
+    required this.id,
+    required this.title,
+    required this.isDetail,
+  });
 
   @override
   State<BookYoutubePlayer> createState() => _BookYoutubePlayerState();
@@ -33,7 +39,7 @@ class _BookYoutubePlayerState extends State<BookYoutubePlayer> {
         enableCaption: true,
         disableDragSeek: false,
       ),
-    )..addListener(listener);
+    )..addListener(() => listener());
 
     _videoMetaData = const YoutubeMetaData();
     _playerState = PlayerState.unknown;
@@ -45,6 +51,9 @@ class _BookYoutubePlayerState extends State<BookYoutubePlayer> {
         _playerState = _controller.value.playerState;
         _videoMetaData = _controller.metadata;
       });
+    }
+    if (!(widget.isDetail) && _controller.value.isPlaying) {
+      _controller.pause();
     }
   }
 

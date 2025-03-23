@@ -10,13 +10,14 @@ class BookCard extends StatelessWidget {
   final double scale;
   final BookModel book;
   final bool isDetail;
-
+  final VoidCallback onToggleDetail;
   const BookCard({
     super.key,
     required this.index,
     required this.scale,
     required this.book,
     required this.isDetail,
+    required this.onToggleDetail,
   });
 
   @override
@@ -124,24 +125,33 @@ class BookCard extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: isDetail ? -50 : -(size.height * 0.22),
-            left: size.width * 0.32,
-            child: Icon(
-              isDetail ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
-              size: 60,
-              color: Colors.black,
-              shadows: [
-                Shadow(
-                  color: book.genre.thintColor,
-                  offset: Offset(3, 3),
-                  blurRadius: 20,
+            top: isDetail ? -55 : -(size.height * 0.22),
+            left: size.width * 0.30,
+            child: GestureDetector(
+              onTap: onToggleDetail,
+              child: Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(shape: BoxShape.circle),
+                child: Icon(
+                  isDetail
+                      ? Icons.keyboard_arrow_down
+                      : Icons.keyboard_arrow_up,
+                  size: 60,
+                  color: Colors.black,
+                  shadows: [
+                    Shadow(
+                      color: book.genre.thintColor,
+                      offset: Offset(5, 5),
+                      blurRadius: 20,
+                    ),
+                    Shadow(
+                      color: book.genre.thintColor,
+                      offset: Offset(-5, 5),
+                      blurRadius: 30,
+                    ),
+                  ],
                 ),
-                Shadow(
-                  color: book.genre.thintColor,
-                  offset: Offset(-3, -3),
-                  blurRadius: 20,
-                ),
-              ],
+              ),
             ),
           ),
         ],

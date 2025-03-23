@@ -5,35 +5,42 @@ import 'package:which_book_2025/models/book_model.dart';
 import 'package:which_book_2025/views/widgets/book_youtube_player.dart';
 import 'package:which_book_2025/views/widgets/draw_stars.dart';
 import 'package:which_book_2025/views/widgets/shining_text.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class BookDetailCard extends StatefulWidget {
-  final int index;
+  final bool isDetail;
   final BookModel book;
-  const BookDetailCard({super.key, required this.index, required this.book});
+  const BookDetailCard({super.key, required this.isDetail, required this.book});
 
   @override
   State<BookDetailCard> createState() => _BookDetailCardState();
 }
 
 class _BookDetailCardState extends State<BookDetailCard> {
-  late final YoutubePlayerController _youtubeController =
-      YoutubePlayerController(initialVideoId: "RyeLupM53DM");
-
+  final ScrollController _scrollController = ScrollController();
   @override
   void dispose() {
-    _youtubeController.dispose();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void resetScrollPosition() {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(0);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final book = widget.book;
     final size = MediaQuery.of(context).size;
+    if (!(widget.isDetail)) {
+      resetScrollPosition();
+    }
     return SizedBox(
-      height: size.height - 100,
+      height: size.height - 120,
       child: SafeArea(
         child: SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
             children: [
               ShiningText(
@@ -122,6 +129,7 @@ class _BookDetailCardState extends State<BookDetailCard> {
                         key: ValueKey(video.youtubeid),
                         id: video.youtubeid,
                         title: video.title,
+                        isDetail: widget.isDetail,
                       ),
                     )
                     .animate(
